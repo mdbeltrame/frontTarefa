@@ -1,0 +1,28 @@
+<div class="task-container">
+  <h2>Nova Tarefa</h2>
+  <form [formGroup]="form" class="task-form">
+    <input type="hidden" id="codigo" formControlName="codigo">
+    <input type="hidden" id="dataCriacao" formControlName="dataCriacao">
+    <div class="input-group">
+      <label for="titulo">Título:</label>
+      <input type="text" id="titulo" formControlName="titulo" autocomplete="off">
+    </div>
+
+    <div class="input-group">
+      <label for="descricao">Descrição:</label>
+      <textarea id="descricao" formControlName="descricao" rows="3"></textarea>
+    </div>
+
+    <div class="input-group">
+      <label for="status">Status:</label>
+      <select id="status" formControlName="status">
+        <option value="ABERTO">Aberto</option>
+        <option value="EMANDAMENTO">Em andamento</option>
+        <option value="CONCLUIDA">Concluída</option>
+      </select>
+    </div>
+
+    <button (click)="onRegistrar()" class="submit-btn" [disabled]="form.invalid">Salvar</button>
+  </form>
+  <p><a [routerLink]="['/dashboard']">Voltar para o Dashboard</a></p>
+</div>
