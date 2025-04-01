@@ -1,49 +1,60 @@
 <div class="dashboard-container">
-    <h2>Lista de Tarefas</h2>
-  
-    <div class="dashboard-header">
-      <button class="submit-btn" (click)="onNovaTarefa()">Novo</button>
-      <button class="logout-btn" (click)="onLogout()">Logout</button>
-    </div>
-  
-    <table class="task-table" *ngIf="tarefas.length > 0; else noTarefas">
-      <thead>
+  <h2>{{LISTA_DE_TAREFAS}}</h2>
+
+  <div class="dashboard-header">
+    <button class="submit-btn" (click)="onNovaTarefa()">{{NOVO}}</button>
+    <button class="logout-btn" (click)="onLogout()">{{LOGOUT}}</button>
+  </div>
+
+  @if (tarefas().length > 0) {
+  <table class="task-table">
+    <thead>
+      <tr>
+        <th>{{TITULO}}</th>
+        <th>{{DESCRICAO}}</th>
+        <th class="alinha-centro">{{STATUS}}</th>
+        <th class="alinha-centro">{{DATA_DE_CRIACAO}}</th>
+        <th class="alinha-centro">{{ACOES}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (tarefa of tarefas(); track $index) {
         <tr>
-          <th>Título</th>
-          <th>Descrição</th>
-          <th class="alinha-centro">Status</th>
-          <th class="alinha-centro">Data de Criação</th>
-          <th class="alinha-centro">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tarefa of tarefas">
           <td>{{ tarefa.titulo }}</td>
           <td>{{ tarefa.descricao }}</td>
-          <td class="task-status alinha-centro" [ngClass]="getStatusClass(tarefa.status)">
+          <td
+            class="task-status alinha-centro"
+            [ngClass]="getStatusClass(tarefa.status)"
+          >
             {{ formatStatus(tarefa.status) }}
           </td>
-          <td class="alinha-centro">{{ tarefa.dataCriacao | date: 'dd/MM/yyyy' }}</td>
           <td class="alinha-centro">
-            <button class="edit-btn" (click)="onEditarTarefa(tarefa)">Editar</button>
-            <button class="delete-btn" (click)="onExcluirTarefa(tarefa.codigo)">Excluir</button>
+            {{ tarefa.dataCriacao | date : "dd/MM/yyyy" }}
+          </td>
+          <td class="alinha-centro">
+            <button class="edit-btn" (click)="onEditarTarefa(tarefa)">
+              {{EDITAR}}
+            </button>
+            <button class="delete-btn" (click)="onExcluirTarefa(tarefa.codigo)">
+              {{EXCLUIR}}
+            </button>
           </td>
         </tr>
-      </tbody>
-    </table>
+      }
   
-    <ng-template #noTarefas>
-      <p class="no-tasks-message">Nenhuma tarefa cadastrada.</p>
-    </ng-template>
-
-    <app-modal-confirmacao 
-      *ngIf="exibirModal"
-      titulo="Excluir Tarefa"
-      mensagem="Tem certeza que deseja excluir esta tarefa?"
-      (confirmar)="onConfirmarExclusao()"
-      (cancelar)="exibirModal = false">
-    </app-modal-confirmacao>
-    
-  </div>
+    </tbody>
+  </table>
+  } @else {
+  <p class="no-tasks-message">{{NENHUMA_TAREFA_CADASTRADA}}</p>
+  } 
   
-  
+  @if (exibirModal()) {
+  <app-modal-confirmacao
+    titulo="Excluir Tarefa"
+    mensagem="Tem certeza que deseja excluir esta tarefa?"
+    (confirmar)="onConfirmarExclusao()"
+    (cancelar)="cancelar()"
+  >
+  </app-modal-confirmacao>
+  }
+</div>

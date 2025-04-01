@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
 import { RegistroDTO } from '../../../static/dtos/registro/registro.dto';
+import { StringConstants } from '../../../static/constants/string.constants';
 
 @Component({
   selector: 'app-register',
@@ -50,6 +51,14 @@ export class RegisterComponent {
       ])
     ),
   });
+
+  readonly NOME = StringConstants.TITULOS.NOME;
+  readonly SENHA = StringConstants.TITULOS.SENHA;
+  readonly EMAIL = StringConstants.TITULOS.EMAIL;
+  readonly CADASTRE_SE = StringConstants.TITULOS.CADASTRE_SE;
+  readonly CADASTRAR = StringConstants.TITULOS.CADASTRAR;
+  readonly FACA_LOGIN = StringConstants.TITULOS.FACA_LOGIN;
+  readonly JA_TEM_CONTA = StringConstants.PERGUNTAS.JA_TEM_UMA_CONTA;
 
   onSubmit(): void {
     console.log('RegisterComponent - OnSubmit - Inicio.');

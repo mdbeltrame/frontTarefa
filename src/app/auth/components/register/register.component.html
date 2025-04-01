@@ -1,19 +1,19 @@
 <div class="register-container">
-  <h2>Cadastre-se</h2>
+  <h2>{{CADASTRE_SE}}</h2>
   <form [formGroup] = "form" class="register-form">
     <div class="input-group">
-      <label for="nome">Nome:</label>
+      <label for="nome">{{NOME}}:</label>
       <input type="text" id="nome" formControlName="nome" autocomplete="off">
     </div>
     <div class="input-group">
-      <label for="email">Email:</label>
+      <label for="email">{{EMAIL}}:</label>
       <input type="email" id="email" formControlName="email" autocomplete="off">
     </div>
     <div class="input-group">
-      <label for="senha">Senha:</label>
+      <label for="senha">{{SENHA}}:</label>
       <input type="password" id="senha" formControlName="senha" autocomplete="off">
     </div>
-    <button (click) = "onSubmit()" class="submit-btn" [disabled]="form.invalid">Cadastrar</button>
+    <button (click) = "onSubmit()" class="submit-btn" [disabled]="form.invalid">{{CADASTRAR}}</button>
   </form>
-  <p>Já tem uma conta? <a [routerLink]="['/login']">Faça login</a></p>
+  <p>{{JA_TEM_CONTA}} <a [routerLink]="['/login']">{{FACA_LOGIN}}</a></p>
 </div>

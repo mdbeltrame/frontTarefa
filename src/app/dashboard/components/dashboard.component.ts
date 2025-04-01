@@ -1,6 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
-import {FormsModule,ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
@@ -9,47 +14,113 @@ import { ChangeDetectorRef } from '@angular/core';
 import { TarefaService } from '../../core/services/tarefa.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ModalConfirmacaoComponent } from '../../modal-confirmacao/components/modal-confirmacao.component';
+import { TarefaDTO } from '../../static/dtos/registro/tarefa.dto';
+import { StringConstants } from '../../static/constants/string.constants';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [FormsModule, CommonModule, RouterModule, ReactiveFormsModule, ModalConfirmacaoComponent],
+  imports: [
+    FormsModule,
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    ModalConfirmacaoComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
   private router = inject(Router);
   private dashboardService = inject(DashboardService);
   private tarefaService = inject(TarefaService);
   private authService = inject(AuthService);
-  private cdr = inject(ChangeDetectorRef);
-  public tarefas: any[] = [];
-  public exibirModal = false;
+  readonly tarefas = signal<Array<TarefaDTO>>([]);
+  readonly exibirModal = signal(false);
   private tarefaParaExcluir!: number | null;
+
+  readonly LISTA_DE_TAREFAS = StringConstants.TITULOS.LISTA_DE_TAREFAS;
+  readonly NOVO = StringConstants.TITULOS.NOVO;
+  readonly LOGOUT = StringConstants.TITULOS.LOGOUT;
+  readonly TITULO = StringConstants.TITULOS.TITULO;
+  readonly DESCRICAO = StringConstants.TITULOS.DESCRICAO;
+  readonly STATUS = StringConstants.TITULOS.STATUS;
+  readonly DATA_DE_CRIACAO = StringConstants.TITULOS.DATA_DE_CRIACAO;
+  readonly ACOES = StringConstants.TITULOS.ACOES;
+  readonly EDITAR = StringConstants.TITULOS.EDITAR;
+  readonly EXCLUIR = StringConstants.TITULOS.EXCLUIR;
+  readonly NENHUMA_TAREFA_CADASTRADA = StringConstants.TITULOS.NENHUMA_TAREFA_CADASTRADA;
 
   ngOnInit(): void {
     console.log('DashboardComponent - ngOnInit - Início.');
     this.onBusca();
-
   }
 
-   onBusca(): void {
+  onBusca(): void {
     console.log('DashboardComponent - onBusca - Buscando tarefas.');
 
-      this.dashboardService
-        .buscar()
+    this.dashboardService
+      .buscar()
+      .pipe(
+        tap((response) => {
+          console.log(
+            'DashboardComponent - onBusca - Tarefas carregadas com sucesso.',
+            response
+          );
+          this.tarefas.set(response);
+        }),
+        catchError((error) => {
+          console.error(
+            'DashboardComponent - onBusca - Erro ao buscar tarefas.',
+            error
+          );
+          return throwError(() => error);
+        })
+      )
+      .subscribe();
+  }
+
+  onNovaTarefa(): void {
+    console.log(
+      'DashboardComponent - onNovaTarefa - Redirecionando para criação de nova tarefa.'
+    );
+    this.router.navigate(['/tarefa']);
+  }
+
+  onEditarTarefa(tarefa: any): void {
+    console.log(
+      `DashboardComponent - onEditarTarefa - Editando tarefa: ${tarefa.codigo}`
+    );
+    this.router.navigate(['/tarefa/', tarefa.codigo]);
+  }
+
+  onExcluirTarefa(codigo: number): void {
+    console.log(
+      `DashboardComponent - onExcluirTarefa - Iniciando Exclusão da Tarefa: ${codigo}`
+    );
+    this.tarefaParaExcluir = codigo;
+    this.exibirModal.set(true);
+  }
+
+  onConfirmarExclusao(): void {
+    if (this.tarefaParaExcluir !== null) {
+      console.log(
+        `DashboardComponent - onConfirmarExclusao - Confirmando exclusão da tarefa ${this.tarefaParaExcluir}`
+      );
+
+      this.tarefaService
+        .excluirTarefa(this.tarefaParaExcluir)
         .pipe(
-          tap((response) => {
+          tap(() => {
             console.log(
-              'DashboardComponent - onBusca - Tarefas carregadas com sucesso.',
-              response
+              `DashboardComponent - onConfirmarExclusao - Tarefa ${this.tarefaParaExcluir} excluída com sucesso.`
             );
-            this.tarefas = response;
-            this.cdr.detectChanges();
+            this.onBusca();
+            this.exibirModal.set(false);
           }),
           catchError((error) => {
             console.error(
-              'DashboardComponent - onBusca - Erro ao buscar tarefas.',
+              `DashboardComponent - onConfirmarExclusao - Erro ao excluir tarefa ${this.tarefaParaExcluir}.`,
               error
             );
             return throwError(() => error);
@@ -57,75 +128,42 @@ export class DashboardComponent {
         )
         .subscribe();
     }
+  }
 
-    onNovaTarefa(): void {
-      console.log('DashboardComponent - onNovaTarefa - Redirecionando para criação de nova tarefa.');
-      this.router.navigate(['/tarefa']);
+  //Formata o texto pois no campo salvo tudo maiusculo e junto
+  formatStatus(status: string): string {
+    switch (status) {
+      case 'ABERTO':
+        return 'Aberto';
+      case 'EMANDAMENTO':
+        return 'Em andamento';
+      case 'CONCLUIDA':
+        return 'Concluída';
+      default:
+        return status;
     }
+  }
 
-    onEditarTarefa(tarefa: any): void {
-      console.log(`DashboardComponent - onEditarTarefa - Editando tarefa: ${tarefa.codigo}`);
-      this.router.navigate(['/tarefa/', tarefa.codigo]);
+  //Troca a cor do status
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'ABERTO':
+        return 'status-aberto';
+      case 'EMANDAMENTO':
+        return 'status-andamento';
+      case 'CONCLUIDA':
+        return 'status-concluida';
+      default:
+        return '';
     }
-  
-    onExcluirTarefa(codigo: number): void {
-      console.log(`DashboardComponent - onExcluirTarefa - Iniciando Exclusão da Tarefa: ${codigo}`);
-      this.tarefaParaExcluir = codigo;
-      this.exibirModal = true;
-    }
+  }
 
-    onConfirmarExclusao(): void {
-      if (this.tarefaParaExcluir !== null) {
-        console.log(`DashboardComponent - onConfirmarExclusao - Confirmando exclusão da tarefa ${this.tarefaParaExcluir}`);
-    
-        this.tarefaService
-          .excluirTarefa(this.tarefaParaExcluir)
-          .pipe(
-            tap(() => {
-              console.log(`DashboardComponent - onConfirmarExclusao - Tarefa ${this.tarefaParaExcluir} excluída com sucesso.`);
-              this.onBusca();
-              this.exibirModal = false;
-            }),
-            catchError((error) => {
-              console.error(`DashboardComponent - onConfirmarExclusao - Erro ao excluir tarefa ${this.tarefaParaExcluir}.`, error);
-              return throwError(() => error);
-            })
-          )
-          .subscribe();
-      }
-    }
+  onLogout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 
-    //Formata o texto pois no campo salvo tudo maiusculo e junto
-    formatStatus(status: string): string {
-      switch (status) {
-        case 'ABERTO':
-          return 'Aberto';
-        case 'EMANDAMENTO':
-          return 'Em andamento';
-        case 'CONCLUIDA':
-          return 'Concluída';
-        default:
-          return status;
-      }
-    }
-
-    //Troca a cor do status
-    getStatusClass(status: string): string {
-      switch (status) {
-        case 'ABERTO':
-          return 'status-aberto';
-        case 'EMANDAMENTO':
-          return 'status-andamento';
-        case 'CONCLUIDA':
-          return 'status-concluida';
-        default:
-          return '';
-      }
-    }
-
-    onLogout() {
-      this.authService.logout();
-      this.router.navigate(['/login']);
-    }
-
+  cancelar(): void {
+    this.exibirModal.set(false);
+  }
 }

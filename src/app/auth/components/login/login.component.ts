@@ -47,6 +47,11 @@ export class LoginComponent {
   });
 
   readonly ENTRAR = StringConstants.TITULOS.ENTRAR;
+  readonly LOGIN = StringConstants.TITULOS.LOGIN;
+  readonly SENHA = StringConstants.TITULOS.SENHA;
+  readonly EMAIL = StringConstants.TITULOS.EMAIL;
+  readonly CADASTRE_SE = StringConstants.TITULOS.CADASTRE_SE;
+  readonly NAO_TEM_CONTA = StringConstants.PERGUNTAS.NAO_TEM_CONTA;
 
   onSubmit(): void {
     console.log('LoginComponent - OnSubmit - Inicio.');

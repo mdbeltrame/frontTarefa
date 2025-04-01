@@ -15,7 +15,7 @@ export class DashboardService {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  buscar(): Observable<any[]> {
+  buscar(): Observable<Array<TarefaDTO>> {
     const token = localStorage.getItem('authToken');
     console.log('Token JWT: ', token);
 
@@ -27,7 +27,7 @@ export class DashboardService {
 
     console.log(headers);
 
-    return this.http.get<any[]>(`${this.apiUrl}`, { headers }).pipe(
+    return this.http.get<Array<TarefaDTO>>(`${this.apiUrl}`, { headers }).pipe(
       catchError((error) => {
         if (error.status === 403) {
           console.log('Sessão expirada, redirecionando para login...');

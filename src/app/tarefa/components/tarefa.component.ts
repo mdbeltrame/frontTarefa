@@ -4,7 +4,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Router, ActivatedRoute} from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   FormsModule,
   NonNullableFormBuilder,
@@ -16,6 +16,7 @@ import { RouterModule } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
 import { TarefaService } from '../../core/services/tarefa.service';
 import { TarefaDTO } from '../../static/dtos/registro/tarefa.dto';
+import { StringConstants } from '../../static/constants/string.constants';
 
 @Component({
   selector: 'app-tarefa',
@@ -42,10 +43,7 @@ export class TarefaComponent {
     ),
     descricao: this.formBuilder.control(
       '',
-      Validators.compose([
-        Validators.minLength(10),
-        Validators.maxLength(300),
-      ])
+      Validators.compose([Validators.minLength(10), Validators.maxLength(300)])
     ),
     status: this.formBuilder.control(
       'ABERTO',
@@ -57,6 +55,16 @@ export class TarefaComponent {
     ),
     dataCriacao: this.formBuilder.control<Date | null>(null),
   });
+
+  readonly NOVA_TAREFA = StringConstants.TITULOS.NOVA_TAREFA;
+  readonly TITULO = StringConstants.TITULOS.TITULO;
+  readonly DESCRICAO = StringConstants.TITULOS.DESCRICAO;
+  readonly STATUS = StringConstants.TITULOS.STATUS;
+  readonly ABERTO = StringConstants.TITULOS.ABERTO;
+  readonly EM_ANDAMENTO = StringConstants.TITULOS.EM_ANDAMENTO;
+  readonly CONCLUIDA = StringConstants.TITULOS.CONCLUIDA;
+  readonly VOLTAR_PARA_DASHBOARD = StringConstants.TITULOS.VOLTAR_PARA_DASHBOARD;
+  readonly SALVAR = StringConstants.TITULOS.SALVAR;
 
   constructor() {
     this.route.paramMap.subscribe((params) => {
@@ -70,18 +78,26 @@ export class TarefaComponent {
   private onCarregarTarefa(codigo: number): void {
     console.log(`TarefaComponent - onCarregarTarefa - Código: ${codigo}`);
 
-    this.tarefaService.buscarPorCodigo(codigo).pipe(
-      tap((tarefa) => {
-        console.log('TarefaComponent - onCarregarTarefa - Tarefa carregada:', tarefa);
-        this.form.patchValue(tarefa);
-      }),
-      catchError((error) => {
-        console.error('TarefaComponent - onCarregarTarefa - Erro ao buscar tarefa:', error);
-        return throwError(() => error);
-      })
-    ).subscribe();
+    this.tarefaService
+      .buscarPorCodigo(codigo)
+      .pipe(
+        tap((tarefa) => {
+          console.log(
+            'TarefaComponent - onCarregarTarefa - Tarefa carregada:',
+            tarefa
+          );
+          this.form.patchValue(tarefa);
+        }),
+        catchError((error) => {
+          console.error(
+            'TarefaComponent - onCarregarTarefa - Erro ao buscar tarefa:',
+            error
+          );
+          return throwError(() => error);
+        })
+      )
+      .subscribe();
   }
-
 
   onRegistrar(): void {
     console.log('TarefaComponent - onRegistrar - Inicio.');
