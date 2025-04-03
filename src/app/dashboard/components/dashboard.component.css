@@ -1,23 +1,21 @@
 :host {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: flex-start;
-  height: 100%;
-  width: 100%;
   background-color: #ffffff;
 }
 
 .dashboard-container {
   width: 100%;
-  max-width: 100%;
+  height: 100vh;
   padding: 30px;
   border-radius: 8px;
   background-color: rgb(255, 255, 255);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  margin: 0 auto;
+  gap: 20px;
+  position: relative;
 }
 
 h2 {
@@ -40,20 +38,22 @@ h2 {
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+}
 
-  &:disabled {
-    background-color: gray;
-    cursor: default;
-  }
+.submit-btn:disabled {
+  background-color: gray;
+  cursor: default;
 }
 
 .task-table {
   width: 100%;
   border-collapse: collapse;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  flex-grow: 1;
 }
 
-th, td {
+th,
+td {
   padding: 12px 20px;
   text-align: left;
   font-size: 16px;
@@ -70,22 +70,8 @@ td {
   border-top: 1px solid #ccc;
 }
 
-.status-aberto {
-  color: #ff9800;
-  font-weight: bold;
-}
-
-.status-andamento {
-  color: #2196f3;
-  font-weight: bold;
-}
-
-.status-concluida {
-  color: #4caf50;
-  font-weight: bold;
-}
-
-.edit-btn, .delete-btn {
+.edit-btn,
+.delete-btn {
   padding: 8px 16px;
   margin: 5px;
   border-radius: 4px;
@@ -131,14 +117,18 @@ a:hover {
   color: #0056b3;
 }
 
-.alinha-centro{
+.alinha-centro {
   text-align: center;
 }
 
-.logout-btn {
-  position: absolute;
+.logout-container {
+  position: fixed;
   top: 10px;
   right: 2%;
+  z-index: 1000;
+}
+
+.logout-btn {
   background-color: rgb(73, 72, 72);
   color: white;
   padding: 10px 20px;
@@ -155,16 +145,4 @@ a:hover {
 
 * {
   font-family: 'Poppins', sans-serif;
-}
-
-@media (max-width: 768px) {
-  .task-table th, .task-table td {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  .submit-btn {
-    font-size: 14px;
-    padding: 10px 20px;
-  }
 }

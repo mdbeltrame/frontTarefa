@@ -1,19 +1,16 @@
-<div class="modal fade position-fixed" tabindex="-1" aria-labelledby="modalConfirmacaoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">{{ titulo }}</h5>
-        </div>
-        <div class="modal-body">
-          <p>{{ mensagem }}</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-cancelar" (click)="onCancelar()">{{CANCELAR}}</button>
-          <button type="button" class="btn btn-danger" (click)="onConfirmar()">{{CONFIRMAR}}</button>
-        </div>
+<div id="modalConfirmacao" class="modal fade" tabindex="-1" aria-labelledby="modalConfirmacaoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ titulo }}</h5>
+      </div>
+      <div class="modal-body">
+        <p>{{ mensagem }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-cancelar" data-bs-dismiss="modal" (click)="onCancelar()">{{ CANCELAR }}</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="onConfirmar()">{{ CONFIRMAR }}</button>
       </div>
     </div>
   </div>
-  
-  <div class="modal-backdrop fade show"></div>
-  
+</div>

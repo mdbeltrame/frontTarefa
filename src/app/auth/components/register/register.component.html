@@ -1,19 +1,23 @@
-<div class="register-container">
-  <h2>{{CADASTRE_SE}}</h2>
-  <form [formGroup] = "form" class="register-form">
-    <div class="input-group">
-      <label for="nome">{{NOME}}:</label>
-      <input type="text" id="nome" formControlName="nome" autocomplete="off">
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="text-center mb-4">{{ CADASTRE_SE }}</h2>
+      <form [formGroup]="form" class="register-form">
+        <div class="mb-3">
+          <label for="nome" class="form-label">{{ NOME }}:</label>
+          <input type="text" id="nome" formControlName="nome" autocomplete="off" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">{{ EMAIL }}:</label>
+          <input type="email" id="email" formControlName="email" autocomplete="off" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="senha" class="form-label">{{ SENHA }}:</label>
+          <input type="password" id="senha" formControlName="senha" autocomplete="off" class="form-control">
+        </div>
+        <button (click)="onSubmit()" class="btn btn-primary w-100" [disabled]="form.invalid">{{ CADASTRAR }}</button>
+      </form>
+      <p class="mt-3 text-center">{{ JA_TEM_CONTA }} <a [routerLink]="['/login']">{{ FACA_LOGIN }}</a></p>
     </div>
-    <div class="input-group">
-      <label for="email">{{EMAIL}}:</label>
-      <input type="email" id="email" formControlName="email" autocomplete="off">
-    </div>
-    <div class="input-group">
-      <label for="senha">{{SENHA}}:</label>
-      <input type="password" id="senha" formControlName="senha" autocomplete="off">
-    </div>
-    <button (click) = "onSubmit()" class="submit-btn" [disabled]="form.invalid">{{CADASTRAR}}</button>
-  </form>
-  <p>{{JA_TEM_CONTA}} <a [routerLink]="['/login']">{{FACA_LOGIN}}</a></p>
+  </div>
 </div>

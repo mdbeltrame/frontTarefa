@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   inject,
   signal,
 } from '@angular/core';
@@ -16,6 +17,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ModalConfirmacaoComponent } from '../../modal-confirmacao/components/modal-confirmacao.component';
 import { TarefaDTO } from '../../static/dtos/registro/tarefa.dto';
 import { StringConstants } from '../../static/constants/string.constants';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-dashboard',
@@ -100,6 +102,19 @@ export class DashboardComponent {
     );
     this.tarefaParaExcluir = codigo;
     this.exibirModal.set(true);
+    setTimeout(() => {
+      this.OnShowModal();
+    }, 0);
+  }
+
+  OnShowModal(): void {
+    const modalElement = document.getElementById('modalConfirmacao');
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    } else {
+      console.error('Elemento do modal não encontrado no DOM.');
+    }
   }
 
   onConfirmarExclusao(): void {
@@ -148,11 +163,11 @@ export class DashboardComponent {
   getStatusClass(status: string): string {
     switch (status) {
       case 'ABERTO':
-        return 'status-aberto';
+        return 'text-warning';
       case 'EMANDAMENTO':
-        return 'status-andamento';
+        return 'text-info';
       case 'CONCLUIDA':
-        return 'status-concluida';
+        return 'text-success';
       default:
         return '';
     }

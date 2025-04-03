@@ -1,28 +1,33 @@
-<div class="task-container">
-  <h2>{{NOVA_TAREFA}}</h2>
-  <form [formGroup]="form" class="task-form">
-    <input type="hidden" id="codigo" formControlName="codigo">
-    <input type="hidden" id="dataCriacao" formControlName="dataCriacao">
-    <div class="input-group">
-      <label for="titulo">{{TITULO}}:</label>
-      <input type="text" id="titulo" formControlName="titulo" autocomplete="off">
-    </div>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="text-center mb-4">{{ NOVA_TAREFA }}</h2>
+      <form [formGroup]="form" class="task-form">
+        <input type="hidden" id="codigo" formControlName="codigo">
+        <input type="hidden" id="dataCriacao" formControlName="dataCriacao">
 
-    <div class="input-group">
-      <label for="descricao">{{DESCRICAO}}:</label>
-      <textarea id="descricao" formControlName="descricao" rows="3"></textarea>
-    </div>
+        <div class="mb-3">
+          <label for="titulo" class="form-label">{{ TITULO }}:</label>
+          <input type="text" id="titulo" formControlName="titulo" autocomplete="off" class="form-control">
+        </div>
 
-    <div class="input-group">
-      <label for="status">{{STATUS}}:</label>
-      <select id="status" formControlName="status">
-        <option value="ABERTO">{{ABERTO}}</option>
-        <option value="EMANDAMENTO">{{EM_ANDAMENTO}}</option>
-        <option value="CONCLUIDA">{{CONCLUIDA}}</option>
-      </select>
-    </div>
+        <div class="mb-3">
+          <label for="descricao" class="form-label">{{ DESCRICAO }}:</label>
+          <textarea id="descricao" formControlName="descricao" rows="3" class="form-control"></textarea>
+        </div>
 
-    <button (click)="onRegistrar()" class="submit-btn" [disabled]="form.invalid">{{SALVAR}}</button>
-  </form>
-  <p><a [routerLink]="['/dashboard']">{{VOLTAR_PARA_DASHBOARD}}</a></p>
+        <div class="mb-3">
+          <label for="status" class="form-label">{{ STATUS }}:</label>
+          <select id="status" formControlName="status" class="form-select">
+            <option value="ABERTO">{{ ABERTO }}</option>
+            <option value="EMANDAMENTO">{{ EM_ANDAMENTO }}</option>
+            <option value="CONCLUIDA">{{ CONCLUIDA }}</option>
+          </select>
+        </div>
+
+        <button (click)="onRegistrar()" class="btn btn-primary w-100" [disabled]="form.invalid">{{ SALVAR }}</button>
+      </form>
+      <p class="text-center mt-3"><a [routerLink]="['/dashboard']">{{ VOLTAR_PARA_DASHBOARD }}</a></p>
+    </div>
+  </div>
 </div>
