@@ -1,0 +1,18 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="text-center mb-4">{{ COLABORADOR }}</h2>
+      <form [formGroup]="form" class="task-form">
+        <input type="hidden" id="codigo" formControlName="codigo">
+
+        <div class="mb-3">
+          <label for="nome" class="form-label">{{ NOME }}:</label>
+          <input type="text" id="nome" formControlName="nome" autocomplete="off" class="form-control">
+        </div>
+
+        <button (click)="onRegistrar()" class="btn btn-primary w-100" [disabled]="form.invalid">{{ SALVAR }}</button>
+      </form>
+      <p class="text-center mt-3"><a [routerLink]="['/colaborador']">{{ VOLTAR }}</a></p>
+    </div>
+  </div>
+</div>

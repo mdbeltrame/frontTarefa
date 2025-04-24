@@ -26,7 +26,11 @@ export class StringConstants {
     EM_ANDAMENTO: 'Em andamento',
     CONCLUIDA: 'Concluída',
     VOLTAR_PARA_DASHBOARD: 'Voltar para o Dashboard',
-    SALVAR: 'Salvar'
+    SALVAR: 'Salvar',
+    COLABORADOR: 'Colaborador',
+    LISTA_DE_COLABORADORES: 'Lista de Colaboradores',
+    NENHUM_COLABORADOR_CADASTRADO: 'Nenhum Colaborador cadastrado.',
+    VOLTAR: 'Voltar',
   };
 
   static readonly PERGUNTAS = {

@@ -11,13 +11,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
 import { DashboardService } from '../../core/services/dashboard.service';
-import { ChangeDetectorRef } from '@angular/core';
 import { TarefaService } from '../../core/services/tarefa.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ModalConfirmacaoComponent } from '../../modal-confirmacao/components/modal-confirmacao.component';
 import { TarefaDTO } from '../../static/dtos/registro/tarefa.dto';
 import { StringConstants } from '../../static/constants/string.constants';
 import * as bootstrap from 'bootstrap';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,11 +27,13 @@ import * as bootstrap from 'bootstrap';
     RouterModule,
     ReactiveFormsModule,
     ModalConfirmacaoComponent,
+    NzButtonModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
+
 export class DashboardComponent {
   private router = inject(Router);
   private dashboardService = inject(DashboardService);
@@ -40,6 +42,7 @@ export class DashboardComponent {
   readonly tarefas = signal<Array<TarefaDTO>>([]);
   readonly exibirModal = signal(false);
   private tarefaParaExcluir!: number | null;
+  public horaAtual : string = '';
 
   readonly LISTA_DE_TAREFAS = StringConstants.TITULOS.LISTA_DE_TAREFAS;
   readonly NOVO = StringConstants.TITULOS.NOVO;
@@ -52,10 +55,12 @@ export class DashboardComponent {
   readonly EDITAR = StringConstants.TITULOS.EDITAR;
   readonly EXCLUIR = StringConstants.TITULOS.EXCLUIR;
   readonly NENHUMA_TAREFA_CADASTRADA = StringConstants.TITULOS.NENHUMA_TAREFA_CADASTRADA;
+  readonly COLABORADOR = StringConstants.TITULOS.COLABORADOR;
 
   ngOnInit(): void {
     console.log('DashboardComponent - ngOnInit - Início.');
     this.onBusca();
+
   }
 
   onBusca(): void {
@@ -180,5 +185,12 @@ export class DashboardComponent {
 
   cancelar(): void {
     this.exibirModal.set(false);
+  }
+
+  onNovoColaborador(): void {
+    console.log(
+      'DashboardComponent - onNovoColaborador - Redirecionando para criação de novo colaborador.'
+    );
+    this.router.navigate(['/colaborador']);
   }
 }
